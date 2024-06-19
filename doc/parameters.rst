@@ -49,7 +49,7 @@ On the diode-receive side, data will be sent to TCP connected clients. To specif
 Unix data source
 """"""""""""""""
 
-The diode-send side gets data from Unix connections. It is necessary to specify ip address and port in which Unix connections will be accepted with the following parameter:
+The diode-send side gets data from Unix connections. It is necessary to specify the unix socket path with the following parameter:
 
 .. code-block::
 
