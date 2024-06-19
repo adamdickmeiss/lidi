@@ -8,7 +8,7 @@ pub(crate) fn start<F>(receiver: &receive::Receiver<F>) -> Result<(), receive::E
     loop {
         let (block_id, packets) = receiver.for_decoding.recv()?;
 
-        log::trace!(
+        log::info!(
             "trying to decode block {block_id} with {} packets",
             packets.len()
         );
@@ -25,10 +25,14 @@ pub(crate) fn start<F>(receiver: &receive::Receiver<F>) -> Result<(), receive::E
                 continue;
             }
             Some(block) => {
-                log::trace!("block {} decoded with {} bytes!", block_id, block.len());
+                log::info!("block {} decoded with {} bytes!", block_id, block.len());
 
                 loop {
                     let mut to_receive = receiver.block_to_receive.lock().expect("acquire lock");
+                    log::info!("receive {} {}", block_id, *to_receive);
+                    if *to_receive != block_id {
+                        *to_receive = block_id;
+                    }
                     if *to_receive == block_id {
                         receiver
                             .to_dispatch
